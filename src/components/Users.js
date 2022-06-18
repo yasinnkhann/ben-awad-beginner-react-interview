@@ -17,7 +17,7 @@ export default function Users() {
 			});
 			console.log(data);
 			console.log(data.results);
-			setRandomUsers([...randomUsers, ...data.results]);
+			setRandomUsers(currUsers => [...currUsers, ...data.results]);
 		} catch (err) {
 			console.error(err);
 		}
