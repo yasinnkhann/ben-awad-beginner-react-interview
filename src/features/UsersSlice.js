@@ -35,7 +35,7 @@ export const {
 	incrementPageNum,
 } = usersSlice.actions;
 
-export const fetchUsers = nextPage => async dispatch => {
+export const fetchUsers = (abortController, nextPage) => async dispatch => {
 	if (!nextPage) {
 		dispatch(fetchingUsers());
 	}
@@ -44,6 +44,7 @@ export const fetchUsers = nextPage => async dispatch => {
 			params: {
 				page: usersSlice.pageNum,
 			},
+			signal: abortController ? abortController.signal : null,
 		});
 		dispatch(fetchUsersSuccess(data.results));
 	} catch (err) {
@@ -53,7 +54,7 @@ export const fetchUsers = nextPage => async dispatch => {
 
 export const fetchNextUser = () => async dispatch => {
 	dispatch(incrementPageNum());
-	dispatch(fetchUsers('next'));
+	dispatch(fetchUsers(null, 'next'));
 };
 
 export const usersSelector = state => state.users;

@@ -8,12 +8,13 @@ export default function Users() {
 
 	const fetchAPIRef = useRef(() => {});
 
-	fetchAPIRef.current = async () => {
+	fetchAPIRef.current = async abortController => {
 		try {
 			const { data } = await axios.get('https://randomuser.me/api', {
 				params: {
 					page: pageCount,
 				},
+				signal: abortController.signal,
 			});
 			console.log(data);
 			console.log(data.results);
@@ -25,7 +26,9 @@ export default function Users() {
 	};
 
 	useEffect(() => {
-		fetchAPIRef.current();
+		const abortController = new AbortController();
+		fetchAPIRef.current(abortController);
+		return () => abortController.abort();
 	}, [pageCount]);
 
 	if (!isLoaded) {

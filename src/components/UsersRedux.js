@@ -4,7 +4,6 @@ import {
 	fetchUsers,
 	fetchNextUser,
 	usersSelector,
-	incrementPageNum,
 } from '../features/UsersSlice';
 
 export default function UsersRedux() {
@@ -12,7 +11,9 @@ export default function UsersRedux() {
 	const { users, isLoading, error } = useSelector(usersSelector);
 
 	useEffect(() => {
-		dispatch(fetchUsers());
+		const abortController = new AbortController();
+		dispatch(fetchUsers(abortController));
+		return () => abortController.abort();
 	}, [dispatch]);
 
 	if (isLoading) {
@@ -21,6 +22,9 @@ export default function UsersRedux() {
 
 	if (error) {
 		console.error(error);
+		if (error.message === 'canceled') {
+			return;
+		}
 		return <p>Error: {error.message}</p>;
 	}
 
