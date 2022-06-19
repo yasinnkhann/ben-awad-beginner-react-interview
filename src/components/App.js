@@ -8,10 +8,10 @@ import '../styles/App.css';
 function App() {
 	return (
 		<div className='app'>
-			<Counter />
-			<Users />
-			{/* <CounterRedux />
-			<UsersRedux /> */}
+			{/* <Counter />
+			<Users /> */}
+			<CounterRedux />
+			<UsersRedux />
 		</div>
 	);
 }
